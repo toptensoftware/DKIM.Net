@@ -27,6 +27,13 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+//
+// Modified by Topten Software (contact@toptensoftware.com) to support
+// DomainKey and DKIM signed emails.
+//
+// Domain key and DKIM implementation based on DKIM.NET by Damien McGivern
+// https://github.com/dmcgiv/DKIM.Net
+//
 
 using System;
 using System.Collections.Generic;
@@ -938,18 +945,9 @@ namespace DKIM
 			{
 				CheckCancellation();
 
-				if (escapeDots)
+				if (escapeDots && line.StartsWith("."))
 				{
-					int i;
-					for (i = 0; i < line.Length; i++)
-					{
-						if (line[i] != '.')
-							break;
-					}
-					if (i > 0 && i == line.Length)
-					{
-						line += ".";
-					}
+					line = "." + line;
 				}
 				writer.Write(line);
 				writer.Write("\r\n");
